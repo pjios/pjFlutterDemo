@@ -18,6 +18,7 @@ class FirstApp extends StatelessWidget {
         primarySwatch: Colors.green,
       ),
       home: const MyFirstPage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

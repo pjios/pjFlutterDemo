@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
       routes: {
         "firstpage":(context)=>FirstApp()
       },
+      debugShowCheckedModeBanner: false,
     );
   }
 }

@@ -3,26 +3,28 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:pj_demoflutterapp/utils/routes/routes_name.dart';
+import 'package:pj_demoflutterapp/view/secondPage/second_screen.dart';
 
-void main() {
-  runApp(const FirstApp());
-}
-
-class FirstApp extends StatelessWidget {
-  const FirstApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: const MyFirstPage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
+// void main() {
+//   runApp(const FirstApp());
+// }
+//
+// class FirstApp extends StatelessWidget {
+//   const FirstApp({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Flutter Demo',
+//       theme: ThemeData(
+//         primarySwatch: Colors.green,
+//       ),
+//       home: const MyFirstPage(),
+//       debugShowCheckedModeBanner: false,
+//     );
+//   }
+// }
 
 class MyFirstPage extends StatefulWidget {
   const MyFirstPage({Key? key}) : super(key: key);
@@ -69,22 +71,32 @@ class _MyFirstPageState extends State<MyFirstPage> {
       print("123456");
     return Scaffold(
     appBar: AppBar(
-    leading: IconButton(
-    icon: Icon(Icons.arrow_back, color: Colors.white),
-    onPressed: () =>
-    //Navigator.of(context).pop(),
-    Navigator.of(context, rootNavigator: true).pop(context),
-    ),
+      backgroundColor: Colors.orange,
+    // leading: IconButton(
+    // icon: Icon(Icons.arrow_back, color: Colors.white),
+    // onPressed: () =>
+    // //Navigator.of(context).pop(),
+    // Navigator.of(context, rootNavigator: true).pop(context),
+    // ),
     title: Text(
-    'ListView',
+    'First Screen',
     style: TextStyle(color: Colors.white),
     ),
     centerTitle: true,
+      actions: [
+
+        IconButton(
+            onPressed: () => {
+        Navigator.of(context).pushNamed(RoutesName.secondPage),
+        },
+            icon: Icon(Icons.navigate_next_outlined), color: Colors.white,),
+
+      ],
     ),
     body:
     Shimmer.fromColors(
     baseColor: Colors.grey.shade400,
-    highlightColor: Colors.green.shade300,
+    highlightColor: Colors.grey.shade300,
     enabled: true,
     //period: const Duration(seconds: 5),
     direction : ShimmerDirection.ltr,
@@ -115,17 +127,27 @@ class _MyFirstPageState extends State<MyFirstPage> {
       print("78910");
     return Scaffold(
     appBar: AppBar(
-    leading: IconButton(
-    icon: Icon(Icons.arrow_back, color: Colors.white),
-    onPressed: () =>
-    //Navigator.of(context).pop(),
-    Navigator.of(context, rootNavigator: true).pop(context),
-    ),
+      backgroundColor: Colors.orange,
+    // leading: IconButton(
+    // icon: Icon(Icons.arrow_back, color: Colors.white),
+    // onPressed: () =>
+    // //Navigator.of(context).pop(),
+    // Navigator.of(context, rootNavigator: true).pop(context),
+    // ),
     title: Text(
-    'ListView',
+    'First Screen',
     style: TextStyle(color: Colors.white),
     ),
     centerTitle: true,
+      actions: [
+
+        IconButton(
+          onPressed: () => {
+            Navigator.of(context).pushNamed(RoutesName.secondPage),
+          },
+          icon: Icon(Icons.navigate_next_outlined), color: Colors.white,),
+
+      ],
     ),
     body:
     ListView.builder(

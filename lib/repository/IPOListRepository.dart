@@ -1,5 +1,5 @@
 import '../data/network/network_api_services.dart';
-import '../models/IPODetails.dart';
+import '../models/IPOList.dart';
 import '../res/app_url.dart';
 
 class IPOListRepository{

@@ -15,7 +15,7 @@ class NetworkApiServices extends BaseApiServices {
     try {
       final response = await http.get(Uri.parse(url), headers: {
         "Content-Type": "application/json",
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImptaXBvMiIsIm5iZiI6MTcwNzQ4MTY4MCwiZXhwIjoxNzA3NDgzNDgwLCJpYXQiOjE3MDc0ODE2ODB9.FROTEWpcONs6snnxnRRF5lxjWkZsau0xltkv7ZE66FA'
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImptaXBvMiIsIm5iZiI6MTcwNzcxMjczMywiZXhwIjoxNzA3NzE0NTMzLCJpYXQiOjE3MDc3MTI3MzN9.vBhkRHBUHB7XcdXlLgnMys85cV9Wi0djIFzVEBsZoNg'
       });
       responseJson = returnResponse(response);
       debugPrint(response.body.toString());

@@ -1,30 +1,10 @@
-import 'dart:convert';
-
+import 'package:pj_demoflutterapp/view_model/first_screen_viewmodel.dart';
+import 'package:pj_demoflutterapp/data/response/status.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:provider/provider.dart';
 import 'package:pj_demoflutterapp/utils/routes/routes_name.dart';
 import 'package:pj_demoflutterapp/view/secondPage/second_screen.dart';
-
-// void main() {
-//   runApp(const FirstApp());
-// }
-//
-// class FirstApp extends StatelessWidget {
-//   const FirstApp({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Flutter Demo',
-//       theme: ThemeData(
-//         primarySwatch: Colors.green,
-//       ),
-//       home: const MyFirstPage(),
-//       debugShowCheckedModeBanner: false,
-//     );
-//   }
-// }
+import 'package:pj_demoflutterapp/models/IPOList.dart';
 
 class MyFirstPage extends StatefulWidget {
   const MyFirstPage({Key? key}) : super(key: key);
@@ -34,143 +14,71 @@ class MyFirstPage extends StatefulWidget {
 }
 
 class _MyFirstPageState extends State<MyFirstPage> {
-  var jsonList;
-  bool _enabled = true;
-
+  FirstScreenViewModel ipoListViewModel = FirstScreenViewModel();
   @override
   void initState() {
-    getData();
-  }
-
-  void getData() async {
-    try {
-      var response = await Dio()
-          .get('https://protocoderspoint.com/jsondata/superheros.json');
-      if (response.statusCode == 200) {
-        setState(() {
-          jsonList = response.data['superheros'] as List;
-            print(jsonList);
-          Future.delayed(Duration(seconds: 2), () {
-            setState(() {
-              _enabled = false;
-            });
-                });
-        });
-      } else {
-        print(response.statusCode);
-      }
-    } catch (e) {
-      print(e);
-    }
+    ipoListViewModel.fetchIPOListApi();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
-    if (_enabled == true){
-      print("123456");
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
     appBar: AppBar(
       backgroundColor: Colors.orange,
-    // leading: IconButton(
-    // icon: Icon(Icons.arrow_back, color: Colors.white),
-    // onPressed: () =>
-    // //Navigator.of(context).pop(),
-    // Navigator.of(context, rootNavigator: true).pop(context),
-    // ),
+    leading: IconButton(
+    icon: Icon(Icons.account_circle_sharp, color: Colors.white),
+    onPressed: () =>
+    //Navigator.of(context, rootNavigator: true).pop(context),
+      Navigator.of(context).pushNamed(RoutesName.secondPage),
+    ),
     title: Text(
     'First Screen',
     style: TextStyle(color: Colors.white),
     ),
     centerTitle: true,
       actions: [
-
-        IconButton(
-            onPressed: () => {
-        Navigator.of(context).pushNamed(RoutesName.secondPage),
-        },
-            icon: Icon(Icons.navigate_next_outlined), color: Colors.white,),
-
-      ],
-    ),
-    body:
-    Shimmer.fromColors(
-    baseColor: Colors.grey.shade400,
-    highlightColor: Colors.grey.shade300,
-    enabled: true,
-    //period: const Duration(seconds: 5),
-    direction : ShimmerDirection.ltr,
-    loop: 0,
-    child: ListView.builder(
-    itemCount: jsonList == null ? 0 : jsonList.length,
-    itemBuilder: (BuildContext context, int index) {
-    return Card(
-    child: ListTile(
-    leading: ClipRRect(
-    borderRadius: BorderRadius.circular(80),
-    child: Image.network(
-    jsonList[index]['url'],
-    fit: BoxFit.fill,
-    width: 50,
-    height: 50,
-    ),
-    ),
-    title: Text(jsonList[index]['name']),
-    subtitle: Text(jsonList[index]['power']),
-    //isThreeLine: true,
-    ));
-    }
-    ),
-    ),
-    );
-    }else{
-      print("78910");
-    return Scaffold(
-    appBar: AppBar(
-      backgroundColor: Colors.orange,
-    // leading: IconButton(
-    // icon: Icon(Icons.arrow_back, color: Colors.white),
-    // onPressed: () =>
-    // //Navigator.of(context).pop(),
-    // Navigator.of(context, rootNavigator: true).pop(context),
-    // ),
-    title: Text(
-    'First Screen',
-    style: TextStyle(color: Colors.white),
-    ),
-    centerTitle: true,
-      actions: [
-
         IconButton(
           onPressed: () => {
             Navigator.of(context).pushNamed(RoutesName.secondPage),
           },
           icon: Icon(Icons.navigate_next_outlined), color: Colors.white,),
-
       ],
     ),
     body:
-    ListView.builder(
-    itemCount: jsonList == null ? 0 : jsonList.length,
-    itemBuilder: (BuildContext context, int index) {
-    return Card(
-    child: ListTile(
-    leading: ClipRRect(
-    borderRadius: BorderRadius.circular(80),
-    child: Image.network(
-    jsonList[index]['url'],
-    fit: BoxFit.fill,
-    width: 50,
-    height: 50,
-    ),
-    ),
-    title: Text(jsonList[index]['name']),
-    subtitle: Text(jsonList[index]['power']),
-    //isThreeLine: true,
-    ));
-    }
-    ),
+    ChangeNotifierProvider<FirstScreenViewModel>(
+        create: (BuildContext context) => ipoListViewModel,
+        child: Consumer<FirstScreenViewModel>(builder: (context, value, _) {
+          switch (value.ipoList.status) {
+            case Status.LOADING:
+              return SizedBox(
+                height: height,
+                child: const Center(child: CircularProgressIndicator()),
+              );
+            case Status.ERROR:
+              return Text(value.ipoList.toString());
+            case Status.COMPLETED:
+              return
+                ListView.builder(
+                    itemCount: value.ipoList.data!.activeIpoList!.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                          child: ListTile(
+                            title: Text('IPO Name: ${value.ipoList.data!.activeIpoList![index].ipoName}'),
+                            subtitle: Text("IPO ID: ${value.ipoList.data!.activeIpoList![index].ipoid}"),
+                            //isThreeLine: true,
+                          ));
+                    }
+                );
+
+          //   ]);
+            default:
+              return const Text("hello");
+          }
+        })),
     );
-    }
+
   }
 }
